@@ -82,7 +82,7 @@ for n in num_nodes:
     # 2nd: VG in dark blue 
     for metric in ['spec_rad_vg', 'dens_vg', 'av_in_degree_vg', 
                 'av_out_degree_vg', 'clustering_coeff_vg', 'av_betweenness_vg']:
-        ax[2,i].scatter(df[metric], df['mae_vg'], s=10, color=custom_cmap_blue_2(alphas[j]))
+        ax[1,i].scatter(df[metric], df['mae_vg'], s=10, color=custom_cmap_blue_2(alphas[j]))
         i = i+1
     i = 0
 
@@ -90,7 +90,7 @@ for n in num_nodes:
     i = 0
     for metric in ['spec_rad_dens', 'dens_dens', 'av_in_degree_dens', 
                 'av_out_degree_dens', 'clustering_coeff_dens', 'av_betweenness_dens']:
-        ax[1,i].scatter(df[metric], df['mae_dens'], s=10, color=custom_cmap_blue_3(alphas[j]))
+        ax[2,i].scatter(df[metric], df['mae_dens'], s=10, color=custom_cmap_blue_3(alphas[j]))
         i = i+1
     i=0
 
