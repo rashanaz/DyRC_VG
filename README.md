@@ -26,11 +26,12 @@ this code to reproduce the results presented in the paper, or to perform
 your own studies on functional networks! 
 All computation is performed in pure Python.
 
+This code was updated to include revisions. 
 
 **Reference**
 
 Please acknowledge and cite the use of this software and its authors when results are used in publications or published elsewhere. You can use the following reference: 
-> C. Geier: **Code for paper Dynamics-Informed Reservoir Computing with Visibility Graphs** (v0.1). Zenodo. [![DOI]()]()
+> C. Geier and M. Stender : **Code for paper Dynamics-Informed Reservoir Computing with Visibility Graphs** (v0.2). Zenodo. [![DOI]()]()
 
 
 ---
@@ -59,7 +60,7 @@ This code provides the following resources:
    1. data_generation :: generate Duffing data
    2. DyRC_VG :: reservoir computing ER, DyRC-VG and dense ER
    3. DyRC_VG_16 :: reservoir computing ER, DyRC-VG 16
-
+   4. DyRC_VG_16_compare_sparsity :: additional studies with ER graphs with sparsity comparable to the graphs from VG 16. Attention, this code does not generate VGs, it uses the ones computed in DyRC_VG_16.
 
 ### 1. To reproduce figures:
 run different figure_xy.py
