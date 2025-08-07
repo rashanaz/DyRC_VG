@@ -45,6 +45,17 @@ The code in this repository was tested on
 Requirements are listed in 'requirements.txt' and can be installed via pip 
 using `pip install -r requirements.txt`.
 
+The DyRC computations require the computation og averge betweenness, which is not currently implemented in pyReCo. To enable this computation, add the function extract_av_betweenness to utils_networks.
+
+```
+# Add more network property extraction functions as needed
+def extract_av_betweenness(graph: Union[np.ndarray, nx.Graph, nx.DiGraph]) -> float:
+    graph = convert_to_nx_graph(graph)
+    betweenness_centrality = nx.betweenness_centrality(graph)
+    av_betweenness_centrality = np.mean(list(dict(betweenness_centrality).values()))
+    return av_betweenness_centrality
+```
+
 ---
 # Navigation
 
