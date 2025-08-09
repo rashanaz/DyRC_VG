@@ -2,7 +2,7 @@
 """ main file for data generation.
 
 Part of the accompanying code for the paper "Dynamics-Informed Reservoir Computing with Visibility Graphs" by Charlotte
-Geier and Merten Stender.
+Geier, Rasha Shanaz and Merten Stender.
 
 Generate time series data by integrating a Duffing oscillator system with a
 given set of parameters. Code will generate three data sets used in the paper and store them in three directories [data_1, data_2, data_3].
