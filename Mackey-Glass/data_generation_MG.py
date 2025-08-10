@@ -1,11 +1,12 @@
+# mackey_glass_data_generator.py
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.signal import find_peaks
+from collections import deque
 
-cm = 1 / 2.54
+cm = 1/2.54
 
-# LaTeX font settings
+# plotting style (keeps compatibility with your other code)
 tex_fonts = {
     "text.usetex": True,
     "font.family": "serif",
@@ -18,162 +19,122 @@ tex_fonts = {
 }
 plt.rcParams.update(tex_fonts)
 
-#######################################
-# Mackey–Glass Equation Implementation
-#######################################
 
-def mackey_glass(t_max, tau, beta, gamma, n, x0, dt):
-    """Numerically solve Mackey–Glass delay differential equation."""
-    steps = int(t_max / dt)
-    delay_steps = int(tau / dt)
+####################### MACKEY-GLASS SOLVER ################################################
+# Equation:
+# dx/dt = beta * x(t - tau) / (1 + x(t - tau)**n) - gamma * x(t)
 
-    x = np.zeros(steps)
-    x[:delay_steps + 1] = x0
+def solve_mg_euler(time, x0, beta, gamma, tau, n):
+    """Simple fixed-step Euler solver with history buffer for Mackey-Glass.
 
-    for t in range(delay_steps, steps - 1):
-        x_tau = x[t - delay_steps]
-        x[t + 1] = x[t] + dt * (beta * x_tau / (1 + x_tau**n) - gamma * x[t])
+    Returns array shape (len(time), 2) columns = [x, xdot].
+    """
+    dt = time[1] - time[0]
+    N = len(time)
+    delay_steps = max(1, int(round(tau / dt)))
 
-    return x
+    # initialize history deque with x0
+    history = deque([x0] * (delay_steps + 1), maxlen=delay_steps + 1)
 
+    x = np.zeros(N, dtype=float)
+    x[0] = x0
 
-#######################################
-# Classification of Dynamics
-#######################################
+    for i in range(1, N):
+        # value at t - tau is the oldest element in history
+        x_tau = history[0]
+        x_prev = history[-1]
+        dxdt = beta * x_tau / (1 + x_tau ** n) - gamma * x_prev
+        x_new = x_prev + dxdt * dt
 
-def classify_dynamics(time, x):
-    peaks, _ = find_peaks(x, height=0)
-    if len(peaks) < 5:
-        return "Not enough data"
+        history.append(x_new)
+        x[i] = x_new
 
-    peak_times = time[peaks]
-    intervals = np.diff(peak_times)
-    mean_int = np.mean(intervals)
-    std_int = np.std(intervals)
-
-    if std_int < 0.05 * mean_int:
-        return "Periodic"
-    elif std_int < 0.2 * mean_int:
-        return "Quasi-periodic"
-    else:
-        return "Chaotic"
+    dx = np.gradient(x, dt)
+    return np.column_stack((x, dx))
 
 
-#######################################
-# Phase Space Attractor Plot
-#######################################
-
-def plot_phase_space(time, x, dt, save_path):
-    """Delay embedding in phase space."""
-    delay = int(20 / dt)  # adjustable delay in samples
-    x1 = x[:-delay]
-    x2 = x[delay:]
-
-    plt.figure(figsize=(6 * cm, 6 * cm))
-    plt.plot(x1, x2, lw=0.3, color="darkblue")
-    plt.xlabel("$x(t)$")
-    plt.ylabel(f"$x(t + \\tau_d)$")
-    plt.title("Phase Space Attractor")
-    plt.tight_layout()
-    plt.savefig(save_path, dpi=300)
-    plt.close()
+def create_mg_timeseries(time, initial_x, params):
+    beta, gamma, tau, n = params
+    return solve_mg_euler(time, initial_x, beta, gamma, tau, n)
 
 
-#######################################
-# Time Series Plot
-#######################################
+####################### PLOTTING HELPERS ################################################
 
-def plot_data_ts(time, x, path_data, dyn_label):
-    plt.figure(figsize=(10 * cm, 5 * cm))
-    plt.plot(time, x, lw=0.5)
+def plot_time_series(time, data, savepath, title=None):
+    plt.figure(figsize=(10*cm, 5*cm))
+    plt.plot(time, data, lw=0.6)
     plt.xlabel('$t$')
-    plt.ylabel('$x(t)$')
-    plt.title(f"Dynamics: {dyn_label}")
+    plt.ylabel('$x$')
+    if title is not None:
+        plt.title(title)
     plt.tight_layout()
-    plt.savefig(path_data, dpi=300)
+    plt.savefig(savepath, dpi=300)
+    plt.close()
+
+def plot_phase_space(time, mg_data, savepath, title="Phase Space Attractor"):
+    x = mg_data[:, 0]
+    dx = mg_data[:, 1]
+    transient_cut = int(0.1 * len(time))
+    x_cut = x[transient_cut:]
+    dx_cut = dx[transient_cut:]
+    plt.figure(figsize=(6*cm, 6*cm))
+    plt.plot(x_cut, dx_cut, lw=0.3, color="darkblue")
+    plt.xlabel("$x$")
+    plt.ylabel("$\dot{x}$")
+    plt.title(title)
+    plt.tight_layout()
+    plt.savefig(savepath, dpi=300)
     plt.close()
 
 
-#######################################
-# Bifurcation Plot
-#######################################
+####################### MAIN GENERATOR ################################################
 
-def bifurcation(param_name, param_values, base_params, t_max, dt, save_path):
-    bif_x = []
-    bif_param = []
+def ensure_dir(d):
+    if not os.path.exists(d):
+        os.makedirs(d)
 
-    for val in param_values:
-        tau, beta, gamma, n = base_params
-        if param_name == "tau":
-            tau = val
-        elif param_name == "beta":
-            beta = val
-        elif param_name == "gamma":
-            gamma = val
+def generate_all():
+    total_time = 700.0
+    num_points = 35000
+    time = np.linspace(0, total_time, num_points)
 
-        x = mackey_glass(t_max, tau, beta, gamma, n, x0=1.2, dt=dt)
+    # parameter sets for MG: (beta, gamma, tau, n)
+    parameter_dict = dict([
+        ('data_1', (0.2, 0.1, 17.0, 10.0)),
+        ('data_2', (0.2, 0.1, 30.0, 10.0)),
+        ('data_3', (0.2, 0.1, 100.0, 10.0))
+    ])
 
-        transient_cut = int(0.8 * len(x))
-        x_cut = x[transient_cut:]
+    initial_x = 1.2  # starting history value
 
-        peaks, _ = find_peaks(x_cut, height=0)
-        x_sample = x_cut[peaks]
+    for dataset, params in parameter_dict.items():
+        print(f"Generating {dataset} with params {params}")
+        ensure_dir(dataset)
 
-        bif_x.extend(x_sample)
-        bif_param.extend([val] * len(x_sample))
+        # save time vector using same file name (compatibility)
+        np.save(os.path.join(dataset, 'duffing_time.npy'), time)
 
-    plt.figure(figsize=(10 * cm, 6 * cm))
-    plt.scatter(bif_param, bif_x, s=0.3, color='black', alpha=0.3, edgecolors='none')
-    plt.xlabel(param_name)
-    plt.ylabel("$x$")
-    plt.title(f"Bifurcation diagram: varying {param_name}")
-    plt.tight_layout()
-    plt.savefig(save_path, dpi=300)
-    plt.close()
+        # generate MG data: columns [x, xdot]
+        mg_data = create_mg_timeseries(time, initial_x, params)  # shape (N,2)
 
+        # create g column as zeros to keep exact shape [N,3] like previous duffing_data
+        g = np.zeros((len(time), 1), dtype=float)
 
-#######################################
-# Data Generation
-#######################################
+        # full data layout identical to duffing: [g, x, xdot]
+        full_data = np.concatenate([g, mg_data], axis=1)
+        np.save(os.path.join(dataset, 'duffing_data.npy'), full_data)
 
-t_max = 700
-dt = 0.05
-time = np.arange(0, t_max, dt)
+        # quick diagnostic plots (full timeseries + detail + phase)
+        plot_time_series(time, full_data[:, 1], os.path.join(dataset, 'duffing_data.png'),
+                         title=f'MG: {dataset} params={params}')
+        plot_time_series(time[:2000], full_data[:2000, 1], os.path.join(dataset, 'duffing_data_detail_1.png'),
+                         title=f'MG detail 1')
+        plot_time_series(time[-2000:], full_data[-2000:, 1], os.path.join(dataset, 'duffing_data_detail_2.png'),
+                         title=f'MG detail 2')
+        plot_phase_space(time, mg_data, os.path.join(dataset, 'phase_space_attractor.png'),
+                         title=f'MG Phase Space: {dataset}')
 
-parameter_dict = {
-    'data_mg1': (17, 0.2, 0.1, 10),   # (tau, beta, gamma, n)
-    'data_mg2': (30, 0.2, 0.1, 10),
-    'data_mg3': (17, 0.9, 0.1, 10)
-}
+        print(f"Saved {dataset}/duffing_time.npy and {dataset}/duffing_data.npy")
 
-for dataset in parameter_dict:
-    os.mkdir(dataset)
-    np.save(os.path.join(dataset, 'time.npy'), time)
-
-    tau, beta, gamma, n = parameter_dict[dataset]
-    x = mackey_glass(t_max, tau, beta, gamma, n, x0=1.2, dt=dt)
-    np.save(os.path.join(dataset, 'mackey_glass.npy'), x)
-
-    transient_cut = int(0.2 * len(time))
-    dyn_label = classify_dynamics(time[transient_cut:], x[transient_cut:])
-
-    plot_data_ts(time, x, os.path.join(dataset, 'mackey_glass.png'), dyn_label)
-    plot_data_ts(time[:2000], x[:2000], os.path.join(dataset, 'mackey_glass_detail_1.png'), dyn_label)
-    plot_data_ts(time[-2000:], x[-2000:], os.path.join(dataset, 'mackey_glass_detail_2.png'), dyn_label)
-
-    plot_phase_space(time, x, dt, os.path.join(dataset, 'phase_space_attractor.png'))
-
-
-#######################################
-# Bifurcation Plots
-#######################################
-
-base_params = (17, 0.2, 0.1, 10)  # (tau, beta, gamma, n)
-# tau_values = np.linspace(10, 40, 200)
-# beta_values = np.linspace(0.1, 1.0, 200)
-# gamma_values = np.linspace(0.05, 0.5, 200)
-
-# Uncomment to generate bifurcation diagrams
-# bifurcation("tau", tau_values, base_params, t_max, dt, "bifurcation_tau.png")
-# bifurcation("beta", beta_values, base_params, t_max, dt, "bifurcation_beta.png")
-# bifurcation("gamma", gamma_values, base_params, t_max, dt, "bifurcation_gamma.png")
+if __name__ == "__main__":
+    generate_all()
