@@ -38,8 +38,8 @@ plt.rcParams.update(tex_fonts)
 from cpsmehelper import export_figure, get_colors
 
 # load data 
-t = np.load('data_1/duffing_time.npy')
-data_1 = np.load('data_1/duffing_data.npy')
+t = np.load('data_3l/lorenz_time.npy')
+data_1 = np.load('data_3l/lorenz_data.npy')
 
 # plot small sample of ts for the method figure
 
@@ -53,7 +53,7 @@ ax.plot(t[idx_train:], data[idx_train:, 1], 'k:', label='data 1', linewidth=.5)
 ax.set_xticks([])
 ax.set_yticks([])
 export_figure(fig, 
-                name=f'figure_1_data_for_methods.png',
+                name=f'figure_1_data_for_methods_Lorenz.png',
                 height=1,
                 width=5,
                 resolution=300)
