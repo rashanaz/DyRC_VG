@@ -122,7 +122,7 @@ if __name__ == "__main__":
 
     """
 
-    data_name = 'data_3'
+    data_name = 'duffing_data_3'
     
     # generate training data (integrate Duffing for some time)
     data = np.load(os.path.join(os.getcwd(),data_name,'duffing_data.npy'))
@@ -167,7 +167,7 @@ if __name__ == "__main__":
     # actual computation
 
     num_nodes_ = [50, 100, 200, 300, 400, 500]
-    num_implementations = 100  # 100
+    num_implementations = 25  # 100
 
 
     for num_nodes in num_nodes_:

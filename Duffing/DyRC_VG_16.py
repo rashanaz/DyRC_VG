@@ -212,7 +212,7 @@ if __name__ == "__main__":
     Data preparation
     """
 
-    data_name = 'data_3'
+    data_name = 'duffing_data_3'
     skip = 16
 
     # generate training data (integrate Duffing for some time)
@@ -255,7 +255,7 @@ if __name__ == "__main__":
 
     skip = 16
     num_nodes_ = [50, 100, 200, 300, 400, 500]
-    num_implementations = 100
+    num_implementations = 25
 
     ######################################
 

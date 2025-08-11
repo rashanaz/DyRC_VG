@@ -62,6 +62,8 @@ def DyRC_compare_density(data_name, num_nodes, iteration_no,
     dens_vg = num_links / (num_nodes**2)
     spec_rad_vg = max(abs(np.linalg.eigvals(A_VG)))
 
+    
+
     print(f'VG properties: density: {dens_vg}, spec rad: {spec_rad_vg}')
 
     # set up reservoir computer 
@@ -122,7 +124,7 @@ if __name__ == "__main__":
 
     """
 
-    data_name = 'data_3'
+    data_name = 'lorenz_data_1'
     
     # generate training data (integrate Duffing for some time)
     data = np.load(os.path.join(os.getcwd(),data_name,'duffing_data.npy'))
@@ -131,7 +133,10 @@ if __name__ == "__main__":
     dt = t[1] - t[0]
 
     # scale data to maximum absolute value of 1
-    data = data / np.max(np.abs(data), axis=0)
+    max_abs = np.max(np.abs(data), axis=0)
+    max_abs[max_abs == 0] = 1.0
+    data = data / max_abs
+    # data = data / np.max(np.abs(data), axis=0)
 
     # extract states and forces
     q = data[:, 1:]  # [q1(t), q2(t)]
@@ -167,7 +172,7 @@ if __name__ == "__main__":
     # actual computation
 
     num_nodes_ = [50, 100, 200, 300, 400, 500]
-    num_implementations = 100  # 100
+    num_implementations = 25  # 100
 
 
     for num_nodes in num_nodes_:

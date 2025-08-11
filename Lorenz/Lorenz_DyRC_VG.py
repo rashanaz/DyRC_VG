@@ -254,7 +254,7 @@ if __name__ == "__main__":
     Data preparation
     """
 
-    data_name = 'data_2l'
+    data_name = 'lorenz_data_1'
     skip = 1
 
     # generate training data (integrate Lorenz for some time)
@@ -306,7 +306,7 @@ if __name__ == "__main__":
     compute 100 implementations for each reservoir size
     """
     
-    num_implementations = 100
+    num_implementations = 25
     skip = 1
 
     for num_nodes in [50, 100, 200, 300, 400, 500]:
