@@ -65,7 +65,7 @@ ax[2] = fig.add_subplot(inner[1])
 
 # A: different Duffing time series 
 
-t = np.load('data_1/duffing_time.npy')
+t = np.load('duffing_data_1/duffing_time.npy')
 data_1 = np.load('data_1/duffing_data.npy')
 data_2 = np.load('data_2/duffing_data.npy')
 data_3 = np.load('data_3/duffing_data.npy')

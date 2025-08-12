@@ -127,7 +127,7 @@ if __name__ == "__main__":
     # generate training data (integrate Duffing for some time)
     data = np.load(os.path.join(os.getcwd(),data_name,'duffing_data.npy'))
     print(np.shape(data))
-    t = np.load(os.path.join(os.getcwd(),'data_1','duffing_time.npy'))
+    t = np.load(os.path.join(os.getcwd(),data_name,'duffing_time.npy'))
     dt = t[1] - t[0]
 
     # scale data to maximum absolute value of 1

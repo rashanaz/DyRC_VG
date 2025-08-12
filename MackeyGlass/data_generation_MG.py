@@ -110,29 +110,28 @@ def generate_all():
         ensure_dir(dataset)
 
         # save time vector using same file name (compatibility)
-        np.save(os.path.join(dataset, 'duffing_time.npy'), time)
+        np.save(os.path.join(dataset, 'mg_time.npy'), time)
 
         # generate MG data: columns [x, xdot]
         mg_data = create_mg_timeseries(time, initial_x, params)  # shape (N,2)
 
-        # create g column as zeros to keep exact shape [N,3] like previous duffing_data
+        # create g column as zeros to keep exact shape [N,3] like previous mg_data
         g = np.zeros((len(time), 1), dtype=float)
 
-        # full data layout identical to duffing: [g, x, xdot]
         full_data = np.concatenate([g, mg_data], axis=1)
-        np.save(os.path.join(dataset, 'duffing_data.npy'), full_data)
+        np.save(os.path.join(dataset, 'mg_data.npy'), full_data)
 
         # quick diagnostic plots (full timeseries + detail + phase)
-        plot_time_series(time, full_data[:, 1], os.path.join(dataset, 'duffing_data.png'),
+        plot_time_series(time, full_data[:, 1], os.path.join(dataset, 'mg_data.png'),
                          title=f'MG: {dataset} params={params}')
-        plot_time_series(time[:2000], full_data[:2000, 1], os.path.join(dataset, 'duffing_data_detail_1.png'),
+        plot_time_series(time[:2000], full_data[:2000, 1], os.path.join(dataset, 'mg_data_detail_1.png'),
                          title=f'MG detail 1')
-        plot_time_series(time[-2000:], full_data[-2000:, 1], os.path.join(dataset, 'duffing_data_detail_2.png'),
+        plot_time_series(time[-2000:], full_data[-2000:, 1], os.path.join(dataset, 'mg_data_detail_2.png'),
                          title=f'MG detail 2')
         plot_phase_space(time, mg_data, os.path.join(dataset, 'phase_space_attractor.png'),
                          title=f'MG Phase Space: {dataset}')
 
-        print(f"Saved {dataset}/duffing_time.npy and {dataset}/duffing_data.npy")
+        print(f"Saved {dataset}/mg_time.npy and {dataset}/mg_data.npy")
 
 if __name__ == "__main__":
     generate_all()

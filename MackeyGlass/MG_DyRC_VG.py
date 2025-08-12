@@ -257,10 +257,10 @@ if __name__ == "__main__":
     data_name = 'mg_data_1'
     skip = 1
 
-    # generate training data (integrate Duffing for some time)
-    data = np.load(os.path.join(os.getcwd(),data_name,'duffing_data.npy'))
+    # generate training data (integrate mg for some time)
+    data = np.load(os.path.join(os.getcwd(),data_name,'mg_data.npy'))
     print(np.shape(data))
-    t = np.load(os.path.join(os.getcwd(),data_name,'duffing_time.npy'))
+    t = np.load(os.path.join(os.getcwd(),data_name,'mg_time.npy'))
     dt = t[1] - t[0]
 
     # use only parts of data

@@ -1,8 +1,8 @@
 import numpy as np
 from scipy.signal import find_peaks
 
-data = np.load('data_3l_0.025/lorenz_data.npy')  # adjust path
-t = np.load('data_3l_0.025/lorenz_time.npy')
+data = np.load('lorenz_data_1/lorenz_data.npy')  # adjust path
+t = np.load('lorenz_data_1/lorenz_time.npy')
 x = data[:,1]  # x(t)
 peaks,_ = find_peaks(x, height=0)
 periods = np.diff(t[peaks])

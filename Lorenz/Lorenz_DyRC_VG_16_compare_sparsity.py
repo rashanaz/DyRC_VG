@@ -127,9 +127,9 @@ if __name__ == "__main__":
     data_name = 'lorenz_data_1'
     
     # generate training data (integrate Duffing for some time)
-    data = np.load(os.path.join(os.getcwd(),data_name,'duffing_data.npy'))
+    data = np.load(os.path.join(os.getcwd(),data_name,'lorenz_data.npy'))
     print(np.shape(data))
-    t = np.load(os.path.join(os.getcwd(),'data_1','duffing_time.npy'))
+    t = np.load(os.path.join(os.getcwd(),data_name,'lorenz_time.npy'))
     dt = t[1] - t[0]
 
     # scale data to maximum absolute value of 1

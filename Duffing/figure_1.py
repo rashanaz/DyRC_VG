@@ -38,8 +38,8 @@ plt.rcParams.update(tex_fonts)
 from cpsmehelper import export_figure, get_colors
 
 # load data 
-t = np.load('data_1/duffing_time.npy')
-data_1 = np.load('data_1/duffing_data.npy')
+t = np.load('duffing_data_1/duffing_time.npy')
+data_1 = np.load('duffing_data_1/duffing_data.npy')
 
 # plot small sample of ts for the method figure
 
