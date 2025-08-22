@@ -2,18 +2,22 @@
 """ main file for DyRC-VG 16 computations.
 
 Part of the accompanying code for the paper "Dynamics-Informed Reservoir Computing with Visibility Graphs" by Charlotte
-Geier and Merten Stender.
+Geier, Rasha Shanaz and Merten Stender.
 
-Computes the random ER reservoir with VG 16 density for comparison. Run DyRC_VG_16 first, because this file does not re-compute VGs, it loads the ones from the DyRC-VG-16 study.
+Computes the random ER reservoir, a DyRC-VG reservoir and a dense ER (with same density as the ER) for each implementation. 
 
-Copyright (c) Charlotte Geier
-Hamburg University of Technology, Dynamics Group
+Copyright (c) Charlotte Geier[1], Rasha Shanaz[2]
+[1] Hamburg University of Technology, Dynamics Group
 www.tuhh.de/dyn
 charlotte.geier@tuhh.de
+[2] Department of Physics, Bharathidasan University, Tiruchirappalli, India
+https://github.com/rashanaz
+rasha@bdu.ac.in
 
 Licensed under the GPLv3. See LICENSE in the project root for license information.
 
-07.08.2025
+Author: Rasha Shanaz
+Date: 12-August-2025
 
 """
 

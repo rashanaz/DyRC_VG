@@ -2,18 +2,22 @@
 """ Figure 1
 
 Part of the accompanying code for the paper "Dynamics-Informed Reservoir Computing with Visibility Graphs" by Charlotte
-Geier and Merten Stender.
+Geier, Rasha Shanaz and Merten Stender.
 
 Figure 1: plot small time series section.
 
-Copyright (c) Charlotte Geier
-Hamburg University of Technology, Dynamics Group
+Copyright (c) Charlotte Geier[1], Rasha Shanaz[2]
+[1] Hamburg University of Technology, Dynamics Group
 www.tuhh.de/dyn
 charlotte.geier@tuhh.de
+[2] Department of Physics, Bharathidasan University, Tiruchirappalli, India
+https://github.com/rashanaz
+rasha@bdu.ac.in
 
 Licensed under the GPLv3. See LICENSE in the project root for license information.
 
-22.07.2025
+Author: Rasha Shanaz
+Date: 06-August-2025
 
 """
 
@@ -53,7 +57,7 @@ ax.plot(t[idx_train:], data[idx_train:, 1], 'k:', label='data 1', linewidth=.5)
 ax.set_xticks([])
 ax.set_yticks([])
 export_figure(fig, 
-                name=f'figure_1_data_for_methods.png',
+                name=f'lorenz_figure_1_data_for_methods.png',
                 height=1,
                 width=5,
                 resolution=300)

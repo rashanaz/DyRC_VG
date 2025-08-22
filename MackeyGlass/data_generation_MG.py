@@ -1,4 +1,21 @@
-# mackey_glass_data_generator.py
+# -*- coding: utf-8 -*-
+""" main file for data generation.
+
+Part of the accompanying code for the paper "Dynamics-Informed Reservoir Computing with Visibility Graphs" by Charlotte
+Geier, Rasha Shanaz and Merten Stender.
+
+Generate time series data by integrating a Lorenz oscillator system with a
+given set of parameters. Code will generate three data sets used in the paper and store them in three directories [data_1, data_2, data_3].
+
+Copyright (c) Rasha Shanaz
+Bharathidasan University, Tiruchirappalli, India
+rasha@bdu.ac.in
+Licensed under the GPLv3. See LICENSE in the project root for license information.
+
+Author: Rasha Shanaz
+Date: 10-August-2025
+"""
+
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -6,13 +23,16 @@ from collections import deque
 
 cm = 1/2.54
 
-# plotting style (keeps compatibility with your other code)
+# set LaTeX font
 tex_fonts = {
+    # Use LaTeX to write all text
     "text.usetex": True,
     "font.family": "serif",
+    # Use 10pt font in plots, to match 10pt font in document
     "axes.titlesize": 10,
     "axes.labelsize": 10,
     "font.size": 10,
+    # Make the legend/label fonts a little smaller
     "legend.fontsize": 8,
     "xtick.labelsize": 8,
     "ytick.labelsize": 8
@@ -20,13 +40,13 @@ tex_fonts = {
 plt.rcParams.update(tex_fonts)
 
 
-####################### MACKEY-GLASS SOLVER ################################################
+####################### MACKEY-GLASS ################################################
 # Equation:
 # dx/dt = beta * x(t - tau) / (1 + x(t - tau)**n) - gamma * x(t)
 
 def solve_mg_euler(time, x0, beta, gamma, tau, n):
+    
     """Simple fixed-step Euler solver with history buffer for Mackey-Glass.
-
     Returns array shape (len(time), 2) columns = [x, xdot].
     """
     dt = time[1] - time[0]
@@ -56,7 +76,7 @@ def create_mg_timeseries(time, initial_x, params):
     return solve_mg_euler(time, initial_x, beta, gamma, tau, n)
 
 
-####################### PLOTTING HELPERS ################################################
+####################### PLOTTING  ################################################
 
 def plot_time_series(time, data, savepath, title=None):
     plt.figure(figsize=(10*cm, 5*cm))
@@ -92,24 +112,26 @@ def ensure_dir(d):
         os.makedirs(d)
 
 def generate_all():
-    total_time = 700.0
-    num_points = 35000
-    time = np.linspace(0, total_time, num_points)
+    # Time vector
+    # define time series length and number of points
+    total_time = 700.0 # 700
+    num_points = 35000 #35,000
+    time = np.linspace(0, total_time, num_points) # Adjust as needed
 
-    # parameter sets for MG: (beta, gamma, tau, n)
+    # parameter sets for MG: (beta, gamma, tau, n) for 3 different dynamics
     parameter_dict = dict([
         ('mg_data_1', (0.2, 0.1, 17.0, 10.0)),
         ('mg_data_2', (0.2, 0.1, 30.0, 10.0)),
         ('mg_data_3', (0.2, 0.1, 100.0, 10.0))
     ])
 
-    initial_x = 1.2  # starting history value
+    # define initial conditions
+    initial_x = 1.2 
 
     for dataset, params in parameter_dict.items():
         print(f"Generating {dataset} with params {params}")
         ensure_dir(dataset)
 
-        # save time vector using same file name (compatibility)
         np.save(os.path.join(dataset, 'mg_time.npy'), time)
 
         # generate MG data: columns [x, xdot]
@@ -118,10 +140,11 @@ def generate_all():
         # create g column as zeros to keep exact shape [N,3] like previous mg_data
         g = np.zeros((len(time), 1), dtype=float)
 
+        # combine forcing and states into one array
         full_data = np.concatenate([g, mg_data], axis=1)
         np.save(os.path.join(dataset, 'mg_data.npy'), full_data)
 
-        # quick diagnostic plots (full timeseries + detail + phase)
+        # plot (full timeseries + detail + phase)
         plot_time_series(time, full_data[:, 1], os.path.join(dataset, 'mg_data.png'),
                          title=f'MG: {dataset} params={params}')
         plot_time_series(time[:2000], full_data[:2000, 1], os.path.join(dataset, 'mg_data_detail_1.png'),

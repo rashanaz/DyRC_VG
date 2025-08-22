@@ -1,22 +1,25 @@
 # -*- coding: utf-8 -*-
-""" Figure 3
+""" Figure 3 for the Mackey-Glass dataset
 
 Part of the accompanying code for the paper "Dynamics-Informed Reservoir Computing with Visibility Graphs" by Charlotte
-Geier and Merten Stender.
+Geier, Rasha Shanaz and Merten Stender.
 
-Figure 3: MAE over different network metrics
+Figure 3: MAE over different network metrics for the Mackey-Glass dataset
 
 Revision 1: Include ER graph with density and spectral radius comparable to VG-16.
 
-
-Copyright (c) Charlotte Geier
-Hamburg University of Technology, Dynamics Group
+Copyright (c) Charlotte Geier[1], Rasha Shanaz[2]
+[1] Hamburg University of Technology, Dynamics Group
 www.tuhh.de/dyn
 charlotte.geier@tuhh.de
+[2] Department of Physics, Bharathidasan University, Tiruchirappalli, India
+https://github.com/rashanaz
+rasha@bdu.ac.in
 
 Licensed under the GPLv3. See LICENSE in the project root for license information.
 
-22.07.2025
+Author: Rasha Shanaz
+Date: 12-August-2025
 
 """
 
@@ -29,7 +32,6 @@ tex_fonts = {
     # Use LaTeX to write all text
     "text.usetex": True,
     "font.family": "serif",
-    # Use 10pt font in plots, to match 10pt font in document
     "axes.titlesize": 10,
     "axes.labelsize": 8,
     "font.size": 8,
@@ -147,10 +149,10 @@ for row_idx, (cmap, label) in enumerate(zip(
                            bbox_to_anchor=(1.05, 1), 
                            loc='upper left', 
                            borderaxespad=0.,
-                           labelspacing=0.15,      # default is 0.5, reduce to bring entries closer
+                           labelspacing=0.15,   # default is 0.5, reduce to bring entries closer
                            handlelength=1,      # default is 2, reduce if needed
-                           handletextpad=0.5,     # reduce padding between handle and text
-                           borderpad=0.2,          # padding between legend content and border)
+                           handletextpad=0.5,   # reduce padding between handle and text
+                           borderpad=0.2,       # padding between legend content and border)
                            frameon=False)
     
 plt.tight_layout(rect=[0, 0, 0.9, 0.95])  # adjust to make room for legend

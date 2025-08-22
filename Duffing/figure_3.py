@@ -2,7 +2,7 @@
 """ Figure 3
 
 Part of the accompanying code for the paper "Dynamics-Informed Reservoir Computing with Visibility Graphs" by Charlotte
-Geier and Merten Stender.
+Geier, Rasha Shanaz and Merten Stender.
 
 Figure 3: MAE over different network metrics
 

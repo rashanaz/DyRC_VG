@@ -1,8 +1,27 @@
+# -*- coding: utf-8 -*-
+""" Checking the timescales of the Duffing system.
+
+Part of the accompanying code for the paper "Dynamics-Informed Reservoir Computing with Visibility Graphs" by Charlotte
+Geier, Rasha Shanaz and Merten Stender.
+
+This code calculates the mean period by finding the peaks in the data.
+
+Copyright (c) Rasha Shanaz
+Bharathidasan University, Tiruchirappalli, India
+rasha@bdu.ac.in
+
+Licensed under the GPLv3. See LICENSE in the project root for license information.
+
+Author: Rasha Shanaz
+Date: 12-August-2025
+
+"""
+
 import numpy as np
 from scipy.signal import find_peaks
 
-data = np.load('data_1/duffing_data.npy')  # adjust path
-t = np.load('data_1/duffing_time.npy')
+data = np.load('duffing_data_1/duffing_data.npy')  # adjust path
+t = np.load('duffing_data_1/duffing_time.npy')
 x = data[:,1]  # x(t)
 peaks,_ = find_peaks(x, height=0)
 periods = np.diff(t[peaks])

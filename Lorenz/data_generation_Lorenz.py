@@ -1,13 +1,20 @@
 # -*- coding: utf-8 -*-
-"""Lorenz system data generation
+""" main file for data generation.
 
-Adapted from Duffing oscillator code to generate three datasets for periodic, edge-of-chaos,
-and chaotic regimes of the Lorenz system.
+Part of the accompanying code for the paper "Dynamics-Informed Reservoir Computing with Visibility Graphs" by Charlotte
+Geier, Rasha Shanaz and Merten Stender.
 
-Maintains file structure compatibility with the Duffing generator.
+Generate time series data by integrating a Lorenz oscillator system with a
+given set of parameters. Code will generate three data sets used in the paper and store them in three directories [data_1, data_2, data_3].
 
-Author: adapted by ChatGPT
-Date: 2025-08-10
+Copyright (c) Rasha Shanaz
+Bharathidasan University, Tiruchirappalli, India
+rasha@bdu.ac.in
+
+Licensed under the GPLv3. See LICENSE in the project root for license information.
+
+Author: Rasha Shanaz
+Date: 06-August-2025
 """
 
 import os
@@ -176,4 +183,4 @@ def bifurcation(param_name, param_values, base_params, save_path):
 
 # Example bifurcation scan
 rho_values = np.linspace(0.0, 50.0, 500)
-# bifurcation("rho", rho_values, (10.0, 20.0, 8/3), "bifurcation_rho.png")
+# bifurcation("rho", rho_values, (10.0, 20.0, 8/3), "lorenz_bifurcation_rho.png")

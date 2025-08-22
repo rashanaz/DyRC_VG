@@ -7,7 +7,7 @@ Geier, Rasha Shanaz and Merten Stender.
 Generate time series data by integrating a Duffing oscillator system with a
 given set of parameters. Code will generate three data sets used in the paper and store them in three directories [data_1, data_2, data_3].
 
-Copyright (c) Charlotte Geier
+Copyright (c) Charlotte Geier 
 Hamburg University of Technology, Dynamics Group
 www.tuhh.de/dyn
 charlotte.geier@tuhh.de
